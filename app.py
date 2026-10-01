@@ -3,7 +3,11 @@
 Portafolio con las aplicaciones de Streamlit hechas en clase.
 """
 
+import os
+import io
+import base64
 import streamlit as st
+from PIL import Image, ImageOps
 
 
 # ─────────────────────────────────────────────
@@ -22,6 +26,49 @@ def html(codigo):
         st.html(codigo)
     else:
         st.markdown(codigo, unsafe_allow_html=True)
+
+
+# ─────────────────────────────────────────────
+# MI FOTO 📷 (marii.HEIC en el repo)
+# El navegador no muestra .HEIC, así que la convertimos a JPG aquí.
+# ─────────────────────────────────────────────
+FOTO = "marii.HEIC"
+
+
+@st.cache_data
+def foto_base64(ruta):
+    """Devuelve la foto lista para mostrar en HTML, o None si no se puede."""
+    if not os.path.exists(ruta):
+        return None
+    try:
+        try:
+            from pillow_heif import register_heif_opener
+            register_heif_opener()
+        except ImportError:
+            pass
+        img = Image.open(ruta)
+        img = ImageOps.exif_transpose(img).convert("RGB")   # endereza la foto
+        img = ImageOps.fit(img, (600, 600), Image.Resampling.LANCZOS)  # cuadrada
+        buf = io.BytesIO()
+        img.save(buf, format="JPEG", quality=88)
+        return base64.b64encode(buf.getvalue()).decode()
+    except Exception:
+        return None
+
+
+foto = foto_base64(FOTO)
+
+
+def foto_html(tam, borde=4):
+    """Círculo con mi foto (o un moñito si la foto no carga)."""
+    if foto:
+        return (f'<img src="data:image/jpeg;base64,{foto}" '
+                f'style="width:{tam}px; height:{tam}px; border-radius:50%; object-fit:cover; '
+                f'border:{borde}px solid #fffaf5; box-shadow:0 0 0 2px #e8b4b8, '
+                f'0 12px 30px rgba(111,78,55,0.25); display:block; margin:0 auto;">')
+    return (f'<div style="width:{tam}px; height:{tam}px; margin:0 auto; border-radius:50%; '
+            f'background:linear-gradient(135deg,#f9e4e4,#ead8c4); border:2px solid #e8b4b8; '
+            f'display:flex; align-items:center; justify-content:center; font-size:{tam // 2.5}px;">🎀</div>')
 
 
 # ─────────────────────────────────────────────
@@ -232,6 +279,17 @@ html("""
         background: rgba(184,151,124,0.22);
         bottom: -90px; right: -50px;
     }
+    .portada .marco {
+        position: relative;
+        z-index: 2;
+        width: fit-content;
+        margin: 0 auto 18px;
+        animation: aparecer 0.8s ease;
+    }
+    @keyframes aparecer {
+        from { opacity: 0; transform: scale(0.9); }
+        to   { opacity: 1; transform: scale(1); }
+    }
     .portada .sobre {
         position: relative;
         font-size: 0.72rem;
@@ -412,12 +470,9 @@ html("""
 # PANEL LATERAL
 # ─────────────────────────────────────────────
 with st.sidebar:
-    html("""
+    html(f"""
     <div style="text-align:center; font-family:'Poppins',sans-serif; padding-top:10px;">
-        <div style="width:96px; height:96px; margin:0 auto; border-radius:50%;
-                    background:linear-gradient(135deg,#f9e4e4,#ead8c4);
-                    border:2px solid #e8b4b8; display:flex; align-items:center;
-                    justify-content:center; font-size:2.6rem;">🎀</div>
+        {foto_html(110, 3)}
         <div style="font-family:'Great Vibes',cursive; font-size:2.4rem; color:#6f4e37; margin-top:10px;">
             Mari Reinoso
         </div>
@@ -430,8 +485,8 @@ with st.sidebar:
 
     st.markdown("### Sobre esta bitácora")
     st.caption(
-        "Aquí guardo todas las aplicaciones de inteligencia artificial que construí "
-        "en clase con Python y Streamlit: texto, voz y visión. 🤎"
+        "Aquí guardo todas las actividades que fui haciendo en clase "
+        "con Python y Streamlit, una por una. 🤎"
     )
 
     st.divider()
@@ -456,11 +511,12 @@ html(f"""
     <span class="deco" style="bottom:34px; right:16%; animation-delay:1.7s;">✨</span>
     <span class="deco" style="top:50%; left:6%; animation-delay:0.6s;">☕</span>
 
-    <div class="sobre">Portafolio · Inteligencia Artificial</div>
+    <div class="marco">{foto_html(170, 5)}</div>
+    <div class="sobre">Portafolio de clase</div>
     <div class="firma">Mari <span>Reinoso</span></div>
     <div class="titulo">Bitácora de actividades en clase</div>
     <div class="linea"></div>
-    <p>Un pequeño diario de todo lo que aprendí creando apps con inteligencia artificial.
+    <p>Un pequeño diario con todas las actividades que hicimos en clase.
        Cada tarjeta es un proyecto: ábrela y pruébala 💌</p>
 </div>
 
