@@ -29,10 +29,10 @@ def html(codigo):
 
 
 # ─────────────────────────────────────────────
-# MI FOTO 📷 (marii.HEIC en el repo)
-# El navegador no muestra .HEIC, así que la convertimos a JPG aquí.
+# MI FOTO 📷 (debe estar en el repo con este mismo nombre)
+# La app la endereza, la recorta en cuadrado y la pone en un círculo.
 # ─────────────────────────────────────────────
-FOTO = "marii.HEIC"
+FOTO = "WhatsApp Image 2026-09-30 at 19.04.57.jpeg"
 
 
 @st.cache_data
