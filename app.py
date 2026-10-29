@@ -181,13 +181,7 @@ proyectos = [
         "descripcion": "Sube un PDF y hazle preguntas sobre su contenido.",
         "link": "https://chatpdfmari-gwfrxr8kgdntvxxncnqkjc.streamlit.app",   # chat_pdfmari
     },
-    {
-        "nombre": "Análisis de Datos",
-        "emoji": "📊",
-        "categoria": "Datos",
-        "descripcion": "Explora datos con tablas, filtros y gráficas.",
-        "link": "",   # cidatosanalisis_mari
-    },
+    
     {
         "nombre": "App Multipágina",
         "emoji": "🗂️",
