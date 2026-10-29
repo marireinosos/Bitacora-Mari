@@ -145,6 +145,56 @@ proyectos = [
         "descripcion": "Encuentra las palabras más importantes dentro de un grupo de textos.",
         "link": "https://jbqjzc6nivejaomlgmrhwk.streamlit.app",
     },
+    # ── NUEVAS: pega el link de Streamlit entre las comillas de "link" ──
+    {
+        "nombre": "Tablero Inteligente",
+        "emoji": "🎨",
+        "categoria": "Visión",
+        "descripcion": "Dibuja figuras, números o constelaciones y la app adivina qué son.",
+        "link": "https://maribb-m75utvmtuhmqy3k55gychu.streamlit.app",   # maribb
+    },
+    {
+        "nombre": "Reconocimiento de Dibujos",
+        "emoji": "✏️",
+        "categoria": "Visión",
+        "descripcion": "Haz un dibujo y la app intenta reconocer qué es.",
+        "link": "https://drawrecog-bhucwn3ukqymbarsnaj9ws.streamlit.app",   # drawrecog
+    },
+    {
+        "nombre": "Predicción de Números",
+        "emoji": "🔢",
+        "categoria": "Visión",
+        "descripcion": "Escribe un número a mano y un modelo entrenado con MNIST lo adivina.",
+        "link": "https://mnistpred-fxau2rf8rmzsykztqystqy.streamlit.app",   # mnist_pred
+    },
+    {
+        "nombre": "Visión de Mari",
+        "emoji": "👁️",
+        "categoria": "Visión",
+        "descripcion": "Analiza una imagen y describe lo que hay en ella.",
+        "link": "https://archivosmultipaginas-bqqrk4ufnuahvpz2rapffj.streamlit.app",   # vision_mari
+    },
+    {
+        "nombre": "Chat con PDF",
+        "emoji": "📄",
+        "categoria": "Texto",
+        "descripcion": "Sube un PDF y hazle preguntas sobre su contenido.",
+        "link": "https://chatpdfmari-gwfrxr8kgdntvxxncnqkjc.streamlit.app",   # chat_pdfmari
+    },
+    {
+        "nombre": "Análisis de Datos",
+        "emoji": "📊",
+        "categoria": "Datos",
+        "descripcion": "Explora datos con tablas, filtros y gráficas.",
+        "link": "",   # cidatosanalisis_mari
+    },
+    {
+        "nombre": "App Multipágina",
+        "emoji": "🗂️",
+        "categoria": "Inicio",
+        "descripcion": "Una app con varias páginas y menú lateral para navegar entre ellas.",
+        "link": "https://multipaginamari-xj8yfihsgmxs7qk8hl6bkj.streamlit.app",   # multipaginamari
+    },
 ]
 
 CATEGORIAS = {
@@ -153,6 +203,7 @@ CATEGORIAS = {
     "Texto":  "📝",
     "Voz":    "🎙️",
     "Visión": "👁️",
+    "Datos":  "📊",
 }
 
 
@@ -492,7 +543,10 @@ with st.sidebar:
     st.divider()
     st.markdown("### Índice")
     for i, p in enumerate(proyectos, start=1):
-        st.markdown(f"{p['emoji']} [{i:02d} · {p['nombre']}]({p['link']})")
+        if p["link"]:
+            st.markdown(f"{p['emoji']} [{i:02d} · {p['nombre']}]({p['link']})")
+        else:
+            st.markdown(f"{p['emoji']} {i:02d} · {p['nombre']} *(pronto)*")
 
 
 # ─────────────────────────────────────────────
@@ -571,7 +625,11 @@ for inicio in range(0, len(visibles), POR_FILA):
                     <div class="desc">{p['descripcion']}</div>
                 </div>
                 """)
-                st.link_button("Abrir proyecto ✨", p["link"], use_container_width=True)
+                if p["link"]:
+                    st.link_button("Abrir proyecto ✨", p["link"], use_container_width=True)
+                else:
+                    st.button("🔗 Link pendiente", key=f"pend_{num}",
+                              disabled=True, use_container_width=True)
 
 
 # ─────────────────────────────────────────────
